@@ -6,19 +6,19 @@ public class GameManager : MonoBehaviour
 	public GameObject mainMenuUI;
 	public GameObject mainGameUI;
 	public GameObject pauseMenuUI;
+
 	public int goals;
-	public  float timeLeft = 10.0f;
-	public GUIStyle displayFont;
+	public  float timeLeft;
 	private bool bShouldPauseGame = false;
 
 	void Start () 
 	{
-		displayFont = new GUIStyle();
-		displayFont.fontSize = 20;
 		mainMenuUI.SetActive(true);
 		mainGameUI.SetActive(false);
 		pauseMenuUI.SetActive(false);
-		PauseGame();
+
+		bShouldPauseGame = true;
+		Time.timeScale = 0;
 	}
 
 	void Update () 
@@ -26,39 +26,45 @@ public class GameManager : MonoBehaviour
 		if(!bShouldPauseGame)
 		{
 			timeLeft -= Time.deltaTime;
+			if(timeLeft <= 0)
+			{
+				PauseGame();
+			}
 		}
 	}
 
-	public void OnPlayButtonPress()
+	public void OnStartGameButtonPress()
 	{
-		ResumeGame();
+		//new game
+		timeLeft = 30.0f;
+		Time.timeScale = 1;
+		bShouldPauseGame = false;
+		mainMenuUI.SetActive(false);
+		pauseMenuUI.SetActive(false);
+		mainGameUI.SetActive(true);
 	}
-
 	public void OnPauseButtonPress()
 	{
 		PauseGame();
 	}
 	public void OnResumeButtonPress()
 	{
-		
+		ResumeGame();
 	}
 	void PauseGame()
 	{
 		bShouldPauseGame = true;
 		Time.timeScale = 0;
+		mainMenuUI.SetActive(false);
+		mainGameUI.SetActive(false);
+		pauseMenuUI.SetActive(true);
 	}
 	void ResumeGame()
 	{
 		bShouldPauseGame = false;
 		Time.timeScale = 1;
 		mainMenuUI.SetActive(false);
+		pauseMenuUI.SetActive(false);
+		mainGameUI.SetActive(true);
 	}
-
-	void OnGUI()
-	{
-		GUI.Label(new Rect(100, 100, 300, 50), "Time Left: " + timeLeft.ToString(), displayFont);
-		GUI.Label(new Rect(100, 120, 300, 50), "Goals: " + goals.ToString(), displayFont);
-
-	}
-
 }
