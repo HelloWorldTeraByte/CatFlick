@@ -36,7 +36,7 @@ public class Ball : MonoBehaviour
 
 	void Update () 
 	{
-		if (Input.touchCount == 1 && !gameManagerScript.bShouldPauseGame) 
+		if (Input.touchCount == 1) 
 		{
 			Touch touch = Input.GetTouch(0);
 
@@ -119,7 +119,7 @@ public class Ball : MonoBehaviour
 			if(kickAngle < 0 && kickAngle > -10)
 				kickAngle = 0f;
 			
-			if(!float.IsNaN(kickAngle))
+			if(!float.IsNaN(kickAngle) && !gameManagerScript.bShouldPauseGame)
 			{
 				rigidBodyComponent.AddForce(kickAngle * 3, kickPower * kickPowerMultiplier , kickPower * kickPowerMultiplier);
 				instantiatorScript.SpawnBall(instantiatorScript.respawnLocation, respawnDelay);

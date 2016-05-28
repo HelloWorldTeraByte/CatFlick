@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : MonoBehaviour 
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
 
 	void Start () 
 	{
+		bShouldPauseGame = false;
 		mainGameUI.SetActive(true);
 		pauseMenuUI.SetActive(false);
 		GameModes currentGameMode = (GameModes)PlayerPrefs.GetInt("GameMode");
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
 			break;
 		default:
 			Debug.Log("ERROR: No game mode selected");
+			timeLeft = 30.0f;
 			break;
 		}
 		displayFont = new GUIStyle();
@@ -48,6 +51,7 @@ public class GameManager : MonoBehaviour
 			}
 		}
 	}
+
 	public void OnPauseButtonPress()
 	{
 		PauseGame();
@@ -56,23 +60,31 @@ public class GameManager : MonoBehaviour
 	{
 		ResumeGame();
 	}
+
+	public void OnHomeButtonPress()
+	{
+		ResumeGame();
+		SceneManager.LoadScene("MainMenu");
+	}
+	 
 	void PauseGame()
 	{
-		bShouldPauseGame = true;
-		Time.timeScale = 0;
 		mainGameUI.SetActive(false);
 		pauseMenuUI.SetActive(true);
+		Time.timeScale = 0;
+		bShouldPauseGame = true;
 	}
 	void ResumeGame()
 	{
 		pauseMenuUI.SetActive(false);
 		mainGameUI.SetActive(true);
-		bShouldPauseGame = false;
 		Time.timeScale = 1;
+		bShouldPauseGame = false;
 	}
-
+	/*
 	void OnGUI()
 	{
 		GUI.Label(new Rect(100, 100, 300, 50), "Time Left: " + timeLeft.ToString(), displayFont);
 	}
+	*/
 }

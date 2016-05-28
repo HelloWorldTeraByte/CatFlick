@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="900"
+   height="900"
+   viewBox="0 0 900 900"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="BoldPauseButton.svg"
+   inkscape:export-filename="C:\Users\hello\Desktop\Noice.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient5611"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#313131;stop-opacity:1;"
+         offset="0"
+         id="stop5613" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="192.58478"
+     inkscape:cy="440.32791"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     units="px" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-152.36239)">
+    <ellipse
+       style="opacity:1;fill:#5a5464;fill-opacity:1;stroke:none;stroke-width:5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path3347"
+       cx="452.28912"
+       cy="604.67841"
+       rx="412.81387"
+       ry="432.56573" />
+    <path
+       style="opacity:0.98999999;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:5;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 310.28815,379.6788 c -27.69998,0 -49.99805,10.03289 -49.99805,22.49609 l 0,405.00586 c 0,12.4632 22.29807,22.49805 49.99805,22.49805 l 50.00195,0 c 27.69997,0 50,-10.03485 50,-22.49805 l 0,-405.00586 c 0,-12.4632 -22.30003,-22.49609 -50,-22.49609 l -50.00195,0 z m 234,0 c -27.69998,0 -50,10.03289 -50,22.49609 l 0,405.00586 c 0,12.4632 22.30002,22.49805 50,22.49805 l 50.00195,0 c 27.69997,0 49.99805,-10.03485 49.99805,-22.49805 l 0,-405.00586 c 0,-12.4632 -22.29808,-22.49609 -49.99805,-22.49609 l -50.00195,0 z"
+       id="rect3341"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
