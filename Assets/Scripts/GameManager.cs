@@ -65,15 +65,14 @@ public class GameManager : MonoBehaviour
 	}
 	void ResumeGame()
 	{
-		bShouldPauseGame = false;
-		Time.timeScale = 1;
 		pauseMenuUI.SetActive(false);
 		mainGameUI.SetActive(true);
+		bShouldPauseGame = false;
+		Time.timeScale = 1;
 	}
 
 	void OnGUI()
 	{
 		GUI.Label(new Rect(100, 100, 300, 50), "Time Left: " + timeLeft.ToString(), displayFont);
 	}
-
 }

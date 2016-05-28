@@ -17,6 +17,8 @@ public class Ball : MonoBehaviour
 	private bool bIsKicked = false;
 	private Rigidbody rigidBodyComponent;
 	private GameObject instantiatorObject;
+	private GameObject gameManager;
+	private GameManager gameManagerScript;
 	private Instantiator instantiatorScript;
 	GUIStyle displayFont;
 
@@ -27,12 +29,14 @@ public class Ball : MonoBehaviour
 		displayFont = new GUIStyle();
 		displayFont.fontSize = 20;
 		instantiatorObject = GameObject.FindGameObjectsWithTag("Ground")[0];
+		gameManager = GameObject.Find("GameManager");
+		gameManagerScript = gameManager.GetComponent<GameManager>();
 		instantiatorScript = instantiatorObject.GetComponent<Instantiator>();
 	}
 
 	void Update () 
 	{
-		if (Input.touchCount == 1) 
+		if (Input.touchCount == 1 && !gameManagerScript.bShouldPauseGame) 
 		{
 			Touch touch = Input.GetTouch(0);
 
