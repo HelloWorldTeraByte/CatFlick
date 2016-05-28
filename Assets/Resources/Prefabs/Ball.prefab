@@ -93,6 +93,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bIsBallKickable: 0
   bHasBallTriggeredGoal: 0
+  gameManager: {fileID: 0}
 --- !u!135 &13580010
 SphereCollider:
   m_ObjectHideFlags: 1

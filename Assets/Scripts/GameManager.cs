@@ -3,22 +3,38 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour 
 {
-	public GameObject mainMenuUI;
+	enum GameModes {TIME30, TIME60, TIME90};
 	public GameObject mainGameUI;
 	public GameObject pauseMenuUI;
 
 	public int goals;
 	public  float timeLeft;
-	private bool bShouldPauseGame = false;
+	public bool bShouldPauseGame = false;
+	GUIStyle displayFont;
 
 	void Start () 
 	{
-		mainMenuUI.SetActive(true);
-		mainGameUI.SetActive(false);
+		mainGameUI.SetActive(true);
 		pauseMenuUI.SetActive(false);
+		GameModes currentGameMode = (GameModes)PlayerPrefs.GetInt("GameMode");
 
-		bShouldPauseGame = true;
-		Time.timeScale = 0;
+		switch(currentGameMode)
+		{
+		case GameModes.TIME30:
+			timeLeft = 30.0f;
+			break;
+		case GameModes.TIME60:
+			timeLeft = 60.0f;
+			break;
+		case GameModes.TIME90:
+			timeLeft = 90.0f;
+			break;
+		default:
+			Debug.Log("ERROR: No game mode selected");
+			break;
+		}
+		displayFont = new GUIStyle();
+		displayFont.fontSize = 20;
 	}
 
 	void Update () 
@@ -32,17 +48,6 @@ public class GameManager : MonoBehaviour
 			}
 		}
 	}
-
-	public void OnStartGameButtonPress()
-	{
-		//new game
-		timeLeft = 30.0f;
-		Time.timeScale = 1;
-		bShouldPauseGame = false;
-		mainMenuUI.SetActive(false);
-		pauseMenuUI.SetActive(false);
-		mainGameUI.SetActive(true);
-	}
 	public void OnPauseButtonPress()
 	{
 		PauseGame();
@@ -55,7 +60,6 @@ public class GameManager : MonoBehaviour
 	{
 		bShouldPauseGame = true;
 		Time.timeScale = 0;
-		mainMenuUI.SetActive(false);
 		mainGameUI.SetActive(false);
 		pauseMenuUI.SetActive(true);
 	}
@@ -63,8 +67,13 @@ public class GameManager : MonoBehaviour
 	{
 		bShouldPauseGame = false;
 		Time.timeScale = 1;
-		mainMenuUI.SetActive(false);
 		pauseMenuUI.SetActive(false);
 		mainGameUI.SetActive(true);
 	}
+
+	void OnGUI()
+	{
+		GUI.Label(new Rect(100, 100, 300, 50), "Time Left: " + timeLeft.ToString(), displayFont);
+	}
+
 }

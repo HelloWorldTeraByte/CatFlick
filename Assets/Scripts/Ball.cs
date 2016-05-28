@@ -8,7 +8,8 @@ public class Ball : MonoBehaviour
 	private float kickPower;
 	private float kickAngle;
 	private float kickPowerMultiplier = 10;
-	private float respawnDelay = 0.5f;
+	private float respawnDelay = 0.8f;
+	private float destroyDelay = 3.0f;
 	private bool bHasCollided = false;
 	private bool bHasCollidedWithFloor = false;
 	public bool bIsBallKickable;
@@ -75,8 +76,7 @@ public class Ball : MonoBehaviour
 		{
 			if(bHasCollided)
 				return;
-			//instantiatorScript.DestroyBall(3f);
-			Destroy(this.gameObject, 3f);
+			Destroy(this.gameObject, destroyDelay);
 			bHasCollided = true;
 		}
 
@@ -84,6 +84,14 @@ public class Ball : MonoBehaviour
 
 	void OnCollisionEnter(Collision other)
 	{
+		if(other.gameObject.name == "Keeper")
+		{
+			if(bHasCollided)
+				return;
+			Destroy(this.gameObject, destroyDelay);
+			bHasCollided = true;
+		}
+
 		if(other.gameObject.tag == "Ground")
 		{
 			if(bHasCollidedWithFloor)
