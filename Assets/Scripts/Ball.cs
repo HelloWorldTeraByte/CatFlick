@@ -130,6 +130,7 @@ public class Ball : MonoBehaviour
 
 	public void WindReflect(float windForce)
 	{
-		rigidBodyComponent.AddRelativeForce(windForce, 0, 0);
+		//rigidBodyComponent.AddRelativeForce(windForce, 0, 0);
+		rigidBodyComponent.AddForce(windForce, 0, 0, ForceMode.Impulse);
 	}
 }

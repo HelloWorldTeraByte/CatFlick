@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Wind : MonoBehaviour 
 {
-	public float windForce = 100f;
+	public float windForce = 3.0f;
 	public bool rightWindSource = true;
 
 	void OnTriggerEnter(Collider other)
