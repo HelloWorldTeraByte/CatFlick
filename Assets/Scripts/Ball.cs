@@ -71,7 +71,9 @@ public class Ball : MonoBehaviour
 	void OnGUI()
 	{
 		GUI.Label(new Rect(100, 100, 300, 50), "Kick Angle: " + (kickAngle * 3).ToString(), displayFont);
-		GUI.Label(new Rect(100, 120, 300, 50), "Kick Power:" + (kickPower * kickPowerMultiplier).ToString(), displayFont);
+		GUI.Label(new Rect(100, 140, 300, 50), "runderY: " + ((Mathf.Round(touchStartPos.y / 10)) * 10)+10 .ToString(), displayFont);
+		GUI.Label(new Rect(100, 160, 300, 50), "runderY: " + ((Mathf.Round(touchEndPos.y / 10)) * 10).ToString(), displayFont);
+
 	}
 	*/
 	void OnTriggerEnter(Collider other)
@@ -119,11 +121,19 @@ public class Ball : MonoBehaviour
 			if(kickAngle < 0 && kickAngle > -10)
 				kickAngle = 0f;
 			
-			if(!float.IsNaN(kickAngle) && !gameManagerScript.bShouldPauseGame)
+			float roundedStartYPos = (Mathf.Round(touchStartPos.y / 10)) * 10;
+			float roundedEndYPos = (Mathf.Round(touchEndPos.y / 10)) * 10;
+				
+			if(!(roundedStartYPos == roundedEndYPos || (roundedStartYPos + 10) == roundedEndYPos || (roundedStartYPos - 10) == roundedEndYPos))
 			{
-				rigidBodyComponent.AddForce(kickAngle * 3, kickPower * kickPowerMultiplier , kickPower * kickPowerMultiplier);
-				instantiatorScript.SpawnBall(instantiatorScript.respawnLocation, respawnDelay);
-				bIsKicked = true;
+				if(!float.IsNaN(kickAngle) && !gameManagerScript.bShouldPauseGame)
+				{
+					rigidBodyComponent.AddForce(kickAngle * 3, kickPower * kickPowerMultiplier , kickPower * kickPowerMultiplier);
+					instantiatorScript.SpawnBall(instantiatorScript.respawnLocation, respawnDelay);
+					bIsKicked = true;
+					if(!gameManagerScript.bHasGameStarted)
+						gameManagerScript.bHasGameStarted = true;
+				}
 			}
 		}
 	}

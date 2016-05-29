@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -11,11 +12,15 @@ public class GameManager : MonoBehaviour
 	public GameObject mainGameUI;
 	public GameObject pauseMenuUI;
 	public GameObject gameOverUI;
+	public bool bHasGameStarted = false;
 	//private string savePath = "SaveData.cat";
 	public int goals;
 	public  float timeLeft;
+	private float gameTime;
 	public bool bShouldPauseGame = false;
 	GUIStyle displayFont;
+	public Text goalsText;
+	public Text timeLeftText;
 
 	void Start () 
 	{
@@ -29,12 +34,15 @@ public class GameManager : MonoBehaviour
 		switch(currentGameMode)
 		{
 		case GameModes.TIME30:
+			gameTime = 30.0f;
 			timeLeft = 30.0f;
 			break;
 		case GameModes.TIME60:
+			gameTime = 60.0f;
 			timeLeft = 60.0f;
 			break;
 		case GameModes.TIME90:
+			gameTime = 90.0f;
 			timeLeft = 90.0f;
 			break;
 		default:
@@ -43,12 +51,14 @@ public class GameManager : MonoBehaviour
 			break;
 		}
 		displayFont = new GUIStyle();
-		displayFont.fontSize = 20;
+		UpdateHUD();
 	}
 
 	void Update () 
 	{
-		if(!bShouldPauseGame)
+		UpdateHUD();
+
+		if(!bShouldPauseGame && bHasGameStarted)
 		{
 			timeLeft -= Time.deltaTime;
 			if(timeLeft <= 0)
@@ -58,10 +68,17 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	public void UpdateHUD()
+	{
+		timeLeftText.text = timeLeft.ToString("F1");
+		goalsText.text = goals.ToString();
+	}
+
 	public void OnPauseButtonPress()
 	{
 		PauseGame();
 	}
+
 	public void OnResumeButtonPress()
 	{
 		ResumeGame();
@@ -71,6 +88,21 @@ public class GameManager : MonoBehaviour
 	{
 		ResumeGame();
 		SceneManager.LoadScene("MainMenu");
+	}
+
+	public void OnReplayButtonPress()
+	{
+		/*
+		bHasGameStarted = false;
+		timeLeft = gameTime;
+		goals = 0;
+		bShouldPauseGame = false;
+		mainGameUI.SetActive(true);
+		pauseMenuUI.SetActive(false);
+		gameOverUI.SetActive(false);
+		bShouldPauseGame = false;
+		*/
+		SceneManager.LoadScene("MainGame");
 	}
 
 	void PauseGame()
@@ -89,11 +121,14 @@ public class GameManager : MonoBehaviour
 		Time.timeScale = 1;
 		bShouldPauseGame = false;
 	}
+
 	void ShowGameOverScreen()
 	{
+		bHasGameStarted = false;
 		pauseMenuUI.SetActive(false);
 		mainGameUI.SetActive(false);
 		gameOverUI.SetActive(true);
+		bShouldPauseGame = true;
 	}
 	public int LoadGameMode()
 	{
@@ -139,7 +174,7 @@ public class GameManager : MonoBehaviour
 	}
 	*/
 }
-/*	
+/*
 [Serializable]
 class SaveStuff
 {
