@@ -13,14 +13,15 @@ public class GameManager : MonoBehaviour
 	public GameObject pauseMenuUI;
 	public GameObject gameOverUI;
 	public bool bHasGameStarted = false;
-	//private string savePath = "SaveData.cat";
+	private string savePath = "/SaveData.cat";
 	public int goals;
 	public  float timeLeft;
 	private float gameTime;
 	public bool bShouldPauseGame = false;
-	GUIStyle displayFont;
 	public Text goalsText;
-	public Text timeLeftText;
+	public Text timeLeftText; 
+	public Text highScore;
+	public Text currentScore; 
 
 	void Start () 
 	{
@@ -28,14 +29,13 @@ public class GameManager : MonoBehaviour
 		mainGameUI.SetActive(true);
 		pauseMenuUI.SetActive(false);
 		gameOverUI.SetActive(false);
-
 		GameModes currentGameMode = (GameModes)LoadGameMode();
 
 		switch(currentGameMode)
 		{
 		case GameModes.TIME30:
-			gameTime = 30.0f;
-			timeLeft = 30.0f;
+			gameTime = 10.0f;
+			timeLeft = 10.0f;
 			break;
 		case GameModes.TIME60:
 			gameTime = 60.0f;
@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
 			timeLeft = 30.0f;
 			break;
 		}
-		displayFont = new GUIStyle();
 		UpdateHUD();
 	}
 
@@ -63,15 +62,18 @@ public class GameManager : MonoBehaviour
 			timeLeft -= Time.deltaTime;
 			if(timeLeft <= 0)
 			{
-				ShowGameOverScreen();
+				GameOver();
 			}
 		}
 	}
 
 	public void UpdateHUD()
 	{
-		timeLeftText.text = timeLeft.ToString("F1");
-		goalsText.text = goals.ToString();
+		if(mainGameUI.activeSelf)
+		{
+			timeLeftText.text = timeLeft.ToString("F1");
+			goalsText.text = goals.ToString();
+		}
 	}
 
 	public void OnPauseButtonPress()
@@ -120,15 +122,27 @@ public class GameManager : MonoBehaviour
 		gameOverUI.SetActive(false);
 		Time.timeScale = 1;
 		bShouldPauseGame = false;
+
 	}
 
-	void ShowGameOverScreen()
+	void GameOver()
 	{
 		bHasGameStarted = false;
 		pauseMenuUI.SetActive(false);
 		mainGameUI.SetActive(false);
 		gameOverUI.SetActive(true);
 		bShouldPauseGame = true;
+
+		SaveStuff savedData = LoadData();
+
+		if(goals > savedData.GetHighScore())
+			savedData.SetHighScore(goals);
+		
+		Save(savedData);
+		
+		highScore.text = savedData.GetHighScore().ToString();
+		currentScore.text = goals.ToString();
+
 	}
 	public int LoadGameMode()
 	{
@@ -147,20 +161,18 @@ public class GameManager : MonoBehaviour
 		return -1; 
 	}
 
-	/*
-	public void Save()
+
+	void Save(SaveStuff dataToSave)
 	{
+		FileStream file;
 		BinaryFormatter binaryFormatter = new BinaryFormatter();
-		FileStream file = File.Create(Application.persistentDataPath + savePath);
+		file = File.Create(Application.persistentDataPath + savePath);
 
-		SaveStuff data = new SaveStuff();
-		//save stuff
-
-		binaryFormatter.Serialize(file, data);
+		binaryFormatter.Serialize(file, dataToSave);
 		file.Close();
 	}
 
-	public void Load()
+	SaveStuff LoadData()
 	{
 		if(File.Exists(Application.persistentDataPath + savePath))
 		{
@@ -169,20 +181,33 @@ public class GameManager : MonoBehaviour
 			SaveStuff data = (SaveStuff)binaryFormatter.Deserialize(file);
 			file.Close();
 
-			//load stuff
+			return data;
+		}
+		else
+		{
+			SaveStuff newData = new SaveStuff();
+			return newData;
 		}
 	}
-	*/
+
 }
-/*
+
 [Serializable]
 class SaveStuff
 {
-	private int highScore;
+	private int highScore = 0;
+	private int docats = 0;
 
 	public void SetHighScore(int score)
 	{
 		highScore = score;
 	}
+	public void SetCoins(int coins)
+	{
+		docats = coins;
+	}
+	public int GetHighScore()
+	{
+		return highScore;
+	}
 }
-*/

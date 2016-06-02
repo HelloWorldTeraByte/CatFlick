@@ -9,6 +9,12 @@ public class MainUI : MonoBehaviour
 {
 	private string savePath = "GameMode.cat";
 
+	public void OnResetButtonPressed()
+	{
+		File.Delete(Application.persistentDataPath + savePath);
+		File.Delete(Application.persistentDataPath + "/SaveData.cat");
+
+	}
 	public void On30sGameModePressed()
 	{
 		SaveGameMode(0);
@@ -36,6 +42,7 @@ public class MainUI : MonoBehaviour
 		binaryFormatter.Serialize(file, modeData);
 		file.Close();
 	}
+
 }
 
 [Serializable]
