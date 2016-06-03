@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
 		mainGameUI.SetActive(true);
 		pauseMenuUI.SetActive(false);
 		gameOverUI.SetActive(false);
+
 		GameModes currentGameMode = (GameModes)LoadGameMode();
 
 		switch(currentGameMode)
@@ -133,19 +134,21 @@ public class GameManager : MonoBehaviour
 		gameOverUI.SetActive(true);
 		bShouldPauseGame = true;
 
-		SaveStuff savedData = LoadData();
+		SaveStuff savedData = LoadData();	//load the exsisting data from the file
 
 		if(goals > savedData.GetHighScore())
 			savedData.SetHighScore(goals);
 		
-		Save(savedData);
-		
+		Save(savedData);					//save the data to the disk
+
+		//update the HUD
 		highScore.text = savedData.GetHighScore().ToString();
 		currentScore.text = goals.ToString();
 
 	}
 	public int LoadGameMode()
 	{
+		//only do this bit if the file exsists, otherwise it gives an IO exception error
 		if(File.Exists(Application.persistentDataPath + "GameMode.cat"))
 		{
 			BinaryFormatter binaryFormatter = new BinaryFormatter();
@@ -185,7 +188,7 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			SaveStuff newData = new SaveStuff();
+			SaveStuff newData = new SaveStuff();		//return  a new set of data if the file is not found
 			return newData;
 		}
 	}

@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Wind : MonoBehaviour 
 {
-	public float windForce = 3.0f;
-	public bool rightWindSource = true;
+	public float minWindForce = 0.5f;
+	public float maxWindForce = 4.5f;
+	private float windForce;
+	public bool rightWindSource;
+	public Text windForceText;
 
 	void OnTriggerEnter(Collider other)
 	{
@@ -12,8 +16,21 @@ public class Wind : MonoBehaviour
 		{
 			if(rightWindSource)
 				other.GetComponent<Ball>().WindReflect(-windForce);
-			if(!rightWindSource)
+			else
 				other.GetComponent<Ball>().WindReflect(windForce);
 		}
+	}
+
+	public void ChangeWindSource()
+	{
+		float randomWindSideChanger;
+		windForce = Random.Range(minWindForce, maxWindForce);
+		randomWindSideChanger = Random.Range(0f, 1f);
+
+		if(randomWindSideChanger > 0.5f)
+			rightWindSource = true;
+		else
+			rightWindSource = false;
+		windForceText.text = windForce.ToString("##.#");
 	}
 }
