@@ -14,44 +14,57 @@ public class GameManager : MonoBehaviour
 	public GameObject gameOverUI;
 	public bool bHasGameStarted = false;
 	private string savePath = "/SaveData.cat";
+	private GameModes currentGameMode;
 	public int goals;
+	private int s30HighScore;
+	private int s60HighScore;
+	private int s90HighScore;
+	private int currentHighScore;
 	public  float timeLeft;
 	private float gameTime;
 	public bool bShouldPauseGame = false;
 	public Text goalsText;
 	public Text timeLeftText; 
-	public Text highScore;
-	public Text currentScore; 
+	public Text highScoreText;
+	public Text currentScoreText; 
+	//public  Animator goalsTextAnimator;
+	//public float shakeSpeed;
 
 	void Start () 
 	{
+		SaveStuff savedData = LoadData();
 		bShouldPauseGame = false;
 		mainGameUI.SetActive(true);
 		pauseMenuUI.SetActive(false);
 		gameOverUI.SetActive(false);
 
-		GameModes currentGameMode = (GameModes)LoadGameMode();
+		currentGameMode = (GameModes)LoadGameMode();
 
 		switch(currentGameMode)
 		{
 		case GameModes.TIME30:
 			gameTime = 10.0f;
 			timeLeft = 10.0f;
+			currentHighScore = s30HighScore = savedData.GetBest30sScore();
 			break;
 		case GameModes.TIME60:
 			gameTime = 60.0f;
 			timeLeft = 60.0f;
+			currentHighScore = s60HighScore = savedData.GetBest60sScore();
 			break;
 		case GameModes.TIME90:
 			gameTime = 90.0f;
 			timeLeft = 90.0f;
+			currentHighScore = s90HighScore = savedData.GetBest90sScore();
 			break;
 		default:
 			Debug.Log("ERROR: No game mode selected");
 			timeLeft = 30.0f;
 			break;
 		}
-		UpdateHUD();
+		UpdateHUD();	
+
+		//goalsTextAnimator = goalsText.GetComponent<Animator>();
 	}
 
 	void Update () 
@@ -66,15 +79,35 @@ public class GameManager : MonoBehaviour
 				GameOver();
 			}
 		}
+
 	}
 
 	public void UpdateHUD()
 	{
+		//goalsTextAnimator.SetFloat("Shake", shakeSpeed);
 		if(mainGameUI.activeSelf)
 		{
 			timeLeftText.text = timeLeft.ToString("F1");
 			goalsText.text = goals.ToString();
+
+			float gValue = ScaleBetween(currentHighScore, 0 , 0, 220, goals);
+
+			if(currentHighScore != 0)
+				goalsText.color = new Color(1f, gValue/255f, 1f);
+			if(currentHighScore < goals)
+				goalsText.color = new Color(1f, 1f, 1f);
+
+			if((timeLeft/gameTime * 100) < 25)
+			{
+				timeLeftText.color = new Color(1f, 0.3f, 0.3f);
+
+			}
 		}
+	}
+
+	public float ScaleBetween(float oldMin, float oldMax, float newMin, float newMax, float oldValue)
+	{
+		return (((oldValue - oldMin) * (newMax - newMin)) / (oldMax - oldMin)) + newMin;
 	}
 
 	public void OnPauseButtonPress()
@@ -134,16 +167,36 @@ public class GameManager : MonoBehaviour
 		gameOverUI.SetActive(true);
 		bShouldPauseGame = true;
 
-		SaveStuff savedData = LoadData();	//load the exsisting data from the file
+		SaveStuff savedData = LoadData();
 
-		if(goals > savedData.GetHighScore())
-			savedData.SetHighScore(goals);
-		
-		Save(savedData);					//save the data to the disk
+		switch(currentGameMode)
+		{
+		case GameModes.TIME30:
+			if(goals > savedData.GetBest30sScore())
+			{
+				savedData.SetBest30sScore(goals);
+			}
+			highScoreText.text = savedData.GetBest30sScore().ToString();
+			break;
+		case GameModes.TIME60:
+			if(goals > savedData.GetBest60sScore())
+			{
+				savedData.SetBest60sScore(goals);
+			}
+			highScoreText.text = savedData.GetBest60sScore().ToString();
+			break;
+		case GameModes.TIME90:
+			if(goals > savedData.GetBest90sScore())
+			{
+				savedData.SetBest90sScore(goals);
+			}
+			highScoreText.text = savedData.GetBest90sScore().ToString();
+			break;
+			
+		}
+		Save(savedData);	
 
-		//update the HUD
-		highScore.text = savedData.GetHighScore().ToString();
-		currentScore.text = goals.ToString();
+		currentScoreText.text = goals.ToString();
 
 	}
 	public int LoadGameMode()
@@ -195,22 +248,41 @@ public class GameManager : MonoBehaviour
 
 }
 
+//at start we got the highscore
 [Serializable]
 class SaveStuff
 {
-	private int highScore = 0;
+	private int best30sScore = 0;
+	private int best60sScore = 0;
+	private int best90sScore = 0;
 	private int docats = 0;
 
-	public void SetHighScore(int score)
+	public void SetBest30sScore(int score)
 	{
-		highScore = score;
+		best30sScore = score;
+	}
+	public void SetBest60sScore(int score)
+	{
+		best60sScore = score;
+	}
+	public void SetBest90sScore(int score)
+	{
+		best90sScore = score;
 	}
 	public void SetCoins(int coins)
 	{
 		docats = coins;
 	}
-	public int GetHighScore()
+	public int GetBest30sScore()
 	{
-		return highScore;
+		return best30sScore;
+	}
+	public int GetBest60sScore()
+	{
+		return best60sScore;
+	}
+	public int GetBest90sScore()
+	{
+		return best90sScore;
 	}
 }
