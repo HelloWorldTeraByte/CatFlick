@@ -9,25 +9,42 @@ public class Wind : MonoBehaviour
 	private float windForce;
 	public bool rightWindSource;
 	public Text windForceText;
+	public Canvas rightWindSourceImage;
+	public Canvas leftWindSourceImage;
 
 	void OnTriggerEnter(Collider other)
 	{
 		if(other.gameObject.tag == "Ball")
 		{
 			if(rightWindSource)
-				other.GetComponent<Ball>().WindReflect(-windForce);
-			else
 				other.GetComponent<Ball>().WindReflect(windForce);
+			else
+				other.GetComponent<Ball>().WindReflect(-windForce);
 		}
 	}
+	void Update()
+	{
 
+		if(rightWindSource)
+		{
+			rightWindSourceImage.GetComponent<Canvas>().enabled = true;
+			leftWindSourceImage.GetComponent<Canvas>().enabled = false;
+
+		}
+		else
+		{
+			rightWindSourceImage.GetComponent<Canvas>().enabled = false;
+			leftWindSourceImage.GetComponent<Canvas>().enabled = true;
+
+		}
+	}
 	public void ChangeWindSource()
 	{
 		float randomWindSideChanger;
 		windForce = Random.Range(minWindForce, maxWindForce);
-		randomWindSideChanger = Random.Range(0f, 1f);
+		randomWindSideChanger = Random.Range(0f, 2f);
 
-		if(randomWindSideChanger > 0.5f)
+		if(randomWindSideChanger > 1f)
 			rightWindSource = true;
 		else
 			rightWindSource = false;

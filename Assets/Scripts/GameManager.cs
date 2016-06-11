@@ -9,6 +9,7 @@ using System.IO;
 public class GameManager : MonoBehaviour 
 {
 	enum GameModes {TIME30, TIME60, TIME90};
+	private AudioSource mainAudioSource;
 	public GameObject mainGameUI;
 	public GameObject pauseMenuUI;
 	public GameObject gameOverUI;
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
 	private string savePath = "/SaveData.cat";
 	private GameModes currentGameMode;
 	public int goals;
+	private int flyHitsPrev;
+	public int flyHits;
+	public int doCatsPerFlyHit = 2;
 	private int s30HighScore;
 	private int s60HighScore;
 	private int s90HighScore;
@@ -27,6 +31,7 @@ public class GameManager : MonoBehaviour
 	public Text timeLeftText; 
 	public Text highScoreText;
 	public Text currentScoreText; 
+	public Text doCatsScore;
 	//public  Animator goalsTextAnimator;
 	//public float shakeSpeed;
 
@@ -63,7 +68,7 @@ public class GameManager : MonoBehaviour
 			break;
 		}
 		UpdateHUD();	
-
+		mainAudioSource = GetComponent<AudioSource>();
 		//goalsTextAnimator = goalsText.GetComponent<Animator>();
 	}
 
@@ -78,6 +83,12 @@ public class GameManager : MonoBehaviour
 			{
 				GameOver();
 			}
+
+			if(flyHitsPrev != flyHits)
+			{
+				// do something
+				flyHitsPrev = flyHits;
+			}
 		}
 
 	}
@@ -91,6 +102,7 @@ public class GameManager : MonoBehaviour
 			goalsText.text = goals.ToString();
 
 			float gValue = ScaleBetween(currentHighScore, 0 , 0, 220, goals);
+			//mainGameUI.GetComponent<ShakeControl>().shakeSpeed = ScaleBetween(currentHighScore, 0 , 0.5f, 0.8f, goals);
 
 			if(currentHighScore != 0)
 				goalsText.color = new Color(1f, gValue/255f, 1f);
@@ -147,6 +159,7 @@ public class GameManager : MonoBehaviour
 		pauseMenuUI.SetActive(true);
 		gameOverUI.SetActive(false);
 		Time.timeScale = 0;
+		mainAudioSource.Pause();
 		bShouldPauseGame = true;
 	}
 	void ResumeGame()
@@ -155,6 +168,7 @@ public class GameManager : MonoBehaviour
 		mainGameUI.SetActive(true);
 		gameOverUI.SetActive(false);
 		Time.timeScale = 1;
+		mainAudioSource.UnPause();
 		bShouldPauseGame = false;
 
 	}
@@ -168,6 +182,7 @@ public class GameManager : MonoBehaviour
 		bShouldPauseGame = true;
 
 		SaveStuff savedData = LoadData();
+		savedData.AddDoCats(flyHits * doCatsPerFlyHit);
 
 		switch(currentGameMode)
 		{
@@ -178,6 +193,7 @@ public class GameManager : MonoBehaviour
 			}
 			highScoreText.text = savedData.GetBest30sScore().ToString();
 			break;
+
 		case GameModes.TIME60:
 			if(goals > savedData.GetBest60sScore())
 			{
@@ -185,6 +201,7 @@ public class GameManager : MonoBehaviour
 			}
 			highScoreText.text = savedData.GetBest60sScore().ToString();
 			break;
+
 		case GameModes.TIME90:
 			if(goals > savedData.GetBest90sScore())
 			{
@@ -197,6 +214,7 @@ public class GameManager : MonoBehaviour
 		Save(savedData);	
 
 		currentScoreText.text = goals.ToString();
+		doCatsScore.text = "$" + savedData.GetDoCats().ToString();
 
 	}
 	public int LoadGameMode()
@@ -269,9 +287,9 @@ class SaveStuff
 	{
 		best90sScore = score;
 	}
-	public void SetCoins(int coins)
+	public void AddDoCats(int amount)
 	{
-		docats = coins;
+		docats += amount;
 	}
 	public int GetBest30sScore()
 	{
@@ -284,5 +302,9 @@ class SaveStuff
 	public int GetBest90sScore()
 	{
 		return best90sScore;
+	}
+	public int GetDoCats()
+	{
+		return docats;
 	}
 }

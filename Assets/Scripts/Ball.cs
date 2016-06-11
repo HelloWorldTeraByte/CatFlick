@@ -14,6 +14,7 @@ public class Ball : MonoBehaviour
 	private bool bHasCollidedWithFloor = false;
 	public bool bIsBallKickable;
 	public bool bHasBallTriggeredGoal;
+	public bool bHasBallTriggeredLaserHit;
 	private bool bIsKicked = false;
 	private Rigidbody rigidBodyComponent;
 	private GameObject instantiatorObject;

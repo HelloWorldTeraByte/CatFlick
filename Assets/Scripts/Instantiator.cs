@@ -8,6 +8,7 @@ public class Instantiator : MonoBehaviour
 	private GameObject ballInstance;
 	public GameObject windSource;
 	public GameObject gameManager;
+	public GameObject flyObject;
 	private int newGoals = 0;
 	private int oldGoals = 0;
 
@@ -15,6 +16,7 @@ public class Instantiator : MonoBehaviour
 	{
 		InstantiatBall(respawnLocation);
 		windSource.GetComponent<Wind>().ChangeWindSource();
+		ChangeLaserLocation();
 	}
 	void Update()
 	{
@@ -22,6 +24,7 @@ public class Instantiator : MonoBehaviour
 
 		if(newGoals != oldGoals)
 		{
+			ChangeLaserLocation();
 			windSource.GetComponent<Wind>().ChangeWindSource();
 			oldGoals = newGoals;
 		}
@@ -47,5 +50,32 @@ public class Instantiator : MonoBehaviour
 	{
 		yield return new WaitForSeconds(time);
 		InstantiatBall(spawnLocation);
+	}
+	void ChangeLaserLocation()
+	{
+		float splitSpawnerLoc = Random.Range(1f, 3f);
+		Vector3 newLocation = new Vector3();
+
+		if(splitSpawnerLoc < 1 &&  splitSpawnerLoc > 0)
+		{
+			newLocation.x = Random.Range(-3.17f, -1.5f);
+			newLocation.y = Random.Range(0.67f , 4.2f);
+			newLocation.z = flyObject.transform.position.z;
+		}
+
+		if(splitSpawnerLoc < 2 &&  splitSpawnerLoc > 1)
+		{
+			newLocation.x = Random.Range(1.2f, 3.12f);
+			newLocation.y = Random.Range(0.67f , 4.2f);
+			newLocation.z = flyObject.transform.position.z;
+		}
+
+		if(splitSpawnerLoc < 3 &&  splitSpawnerLoc > 2)
+		{
+			newLocation.x = Random.Range(-0.84f, 0.69f);
+			newLocation.y = Random.Range(1.7f , 4.2f);
+			newLocation.z = flyObject.transform.position.z;
+		}
+		flyObject.transform.position = newLocation;
 	}
 }
