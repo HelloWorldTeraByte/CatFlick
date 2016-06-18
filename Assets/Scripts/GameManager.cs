@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 {
 	enum GameModes {TIME30, TIME60, TIME90};
 	private AudioSource mainAudioSource;
+	public Instantiator instantiator;
+	public UIManager uiManager;
 	public GameObject mainGameUI;
 	public GameObject pauseMenuUI;
 	public GameObject gameOverUI;
@@ -86,7 +88,8 @@ public class GameManager : MonoBehaviour
 
 			if(flyHitsPrev != flyHits)
 			{
-				// do something
+				instantiator.ChangeLaserLocation();
+				uiManager.FadeOutFlyHitText();
 				flyHitsPrev = flyHits;
 			}
 		}

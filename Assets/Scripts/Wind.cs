@@ -8,9 +8,8 @@ public class Wind : MonoBehaviour
 	public float maxWindForce = 4.5f;
 	private float windForce;
 	public bool rightWindSource;
+	public UIManager uiManager;
 	public Text windForceText;
-	public Canvas rightWindSourceImage;
-	public Canvas leftWindSourceImage;
 
 	void OnTriggerEnter(Collider other)
 	{
@@ -26,17 +25,11 @@ public class Wind : MonoBehaviour
 	{
 
 		if(rightWindSource)
-		{
-			rightWindSourceImage.GetComponent<Canvas>().enabled = true;
-			leftWindSourceImage.GetComponent<Canvas>().enabled = false;
+			uiManager.ChangeWindSignToRight(true);
 
-		}
 		else
-		{
-			rightWindSourceImage.GetComponent<Canvas>().enabled = false;
-			leftWindSourceImage.GetComponent<Canvas>().enabled = true;
+			uiManager.ChangeWindSignToRight(false);
 
-		}
 	}
 	public void ChangeWindSource()
 	{

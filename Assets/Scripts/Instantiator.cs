@@ -51,7 +51,7 @@ public class Instantiator : MonoBehaviour
 		yield return new WaitForSeconds(time);
 		InstantiatBall(spawnLocation);
 	}
-	void ChangeLaserLocation()
+	public void ChangeLaserLocation()
 	{
 		float splitSpawnerLoc = Random.Range(1f, 3f);
 		Vector3 newLocation = new Vector3();
